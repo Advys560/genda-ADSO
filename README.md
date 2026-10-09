@@ -1,59 +1,134 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Gestor ADSO
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 1. Descripción del proyecto
 
-## About Laravel
+Gestor ADSO es un proyecto integrador del programa ADSO del SENA. Su objetivo es construir progresivamente una aplicación utilizando PHP, Laravel y una base de datos MariaDB/MySQL.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 2. Herramientas utilizadas y versiones
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Las versiones deben corresponder a las instaladas y verificadas en el equipo.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **PHP:** [Pegar resultado de `php -v`]
+- **Composer:** [Pegar resultado de `composer -V`]
+- **Laravel:** [Pegar resultado de `php artisan --version`]
+- **Git:** [Pegar resultado de `git --version`]
+- **Base de datos:** MariaDB/MySQL mediante XAMPP.
+- **Editor de código:** Visual Studio Code.
+- **Sistema operativo:** Windows.
 
-## Learning Laravel
+## 3. Requisitos previos
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Para ejecutar el proyecto se necesitan las siguientes herramientas:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- XAMPP con PHP y MariaDB/MySQL.
+- Composer.
+- Git.
+- Visual Studio Code.
+- Laravel instalado mediante Composer.
 
-## Laravel Sponsors
+## 4. Instalación y configuración
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Paso 1. Ubicar el proyecto
 
-### Premium Partners
+Abrir una terminal en la carpeta `gestor-adso`.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Paso 2. Configurar el archivo de entorno
 
-## Contributing
+Si el archivo `.env` no existe, crearlo a partir de `.env.example`.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+En CMD:
 
-## Code of Conduct
+```bash
+copy .env.example .env
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Generar la clave de la aplicación:
 
-## Security Vulnerabilities
+```bash
+php artisan key:generate
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Paso 3. Configurar la base de datos
 
-## License
+Iniciar MySQL desde el panel de control de XAMPP y crear la base de datos `gestor_adso`.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Configurar los siguientes valores en el archivo `.env`:
+
+```dotenv
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=gestor_adso
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Estas credenciales corresponden al entorno local de desarrollo utilizado en la guía.
+
+### Paso 4. Ejecutar las migraciones
+
+Limpiar la caché de configuración:
+
+```bash
+php artisan config:clear
+```
+
+Crear las tablas de la base de datos:
+
+```bash
+php artisan migrate
+```
+
+### Paso 5. Iniciar el servidor
+
+Ejecutar el siguiente comando desde la carpeta del proyecto:
+
+```bash
+php artisan serve
+```
+
+Abrir en el navegador la dirección:
+
+http://127.0.0.1:8000
+
+## 5. Estructura del proyecto
+
+- `app/`: lógica principal de la aplicación.
+- `routes/`: definición de las rutas.
+- `resources/`: vistas y recursos de la aplicación.
+- `database/`: migraciones, seeders y factories.
+- `public/`: punto de entrada público de la aplicación.
+- `config/`: archivos de configuración.
+- `storage/`: archivos generados y registros.
+- `.env`: configuración del entorno.
+- `artisan`: interfaz de comandos de Laravel.
+- `composer.json`: dependencias del proyecto.
+
+## 6. Control de versiones
+
+El proyecto utiliza Git para registrar los cambios realizados.
+
+Comandos utilizados:
+
+```bash
+git status
+git add .
+git commit -m "Semana 1: Entorno listo + Laravel base"
+```
+
+## 7. Evidencias del proceso
+
+Se deben registrar capturas de pantalla que demuestren:
+
+1. PHP instalado y apuntando a la ruta de XAMPP.
+2. Extensiones PHP requeridas habilitadas.
+3. Composer y Git funcionando correctamente.
+4. Laravel instalado y funcionando en el navegador.
+5. Base de datos `gestor_adso` creada y migraciones ejecutadas exitosamente.
+6. Proyecto abierto en Visual Studio Code y primer commit registrado.
+
+Cada captura debe incluir una breve explicación del comando ejecutado, su función y el resultado obtenido.
+
+## 8. Estado del proyecto
+
+El entorno de desarrollo inicial de Gestor ADSO se configura con PHP, Laravel, Composer, XAMPP y Git. Esta base permitirá continuar el desarrollo del proyecto integrador durante las siguientes semanas del programa ADSO.
