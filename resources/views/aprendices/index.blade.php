@@ -9,8 +9,26 @@
             </div>
         </div>
 
+        <form class="search-form" action="{{ route('aprendices.index') }}" method="GET" role="search" data-auto-filter>
+            <label for="campo">Filtrar por</label>
+            <select id="campo" name="campo" data-filter-field>
+                <option value="todos" @selected($campo === 'todos')>Todos los campos</option>
+                <option value="nombre" @selected($campo === 'nombre')>Nombre</option>
+                <option value="documento" @selected($campo === 'documento')>Documento</option>
+                <option value="correo" @selected($campo === 'correo')>Correo</option>
+            </select>
+            <label class="sr-only" for="q">Término de búsqueda</label>
+            <input id="q" type="search" name="q" value="{{ $q }}" placeholder="Escribe para filtrar aprendices" data-filter-query>
+            <button class="btn-primary" type="submit">Filtrar</button>
+            @if ($q !== '' || $campo !== 'todos')
+                <a class="btn-secondary" href="{{ route('aprendices.index') }}">Limpiar</a>
+            @endif
+        </form>
+
         @if($aprendices->isEmpty())
-            <div class="empty-state">No hay aprendices registrados.</div>
+            <div class="empty-state">
+                {{ $q !== '' ? 'No se encontraron aprendices para este filtro.' : 'No hay aprendices registrados.' }}
+            </div>
         @else
             <div class="table-wrapper">
                 <table class="data-table">

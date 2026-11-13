@@ -3,34 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aprendiz;
+use App\Http\Requests\StoreUpdateAprendizRequest;
 use Illuminate\Http\Request;
 
 class AprendizController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $aprendices = Aprendiz::latest()->paginate(10);
+        $filters = $request->validate([
+            'q' => ['nullable', 'string', 'max:120'],
+            'campo' => ['sometimes', 'in:todos,nombre,documento,correo'],
+        ]);
+        $q = trim($filters['q'] ?? '');
+        $campo = $filters['campo'] ?? 'todos';
 
-        return view('aprendices.index', compact('aprendices'));
+        $aprendices = Aprendiz::query()
+            ->filter($q, $campo)
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('aprendices.index', compact('aprendices', 'q', 'campo'));
     }
 
     public function create()
     {
-        return view('aprendices.create');
+        $aprendiz = new Aprendiz();
+
+        return view('aprendices.create', compact('aprendiz'));
     }
 
-    public function store(Request $request)
+    public function store(StoreUpdateAprendizRequest $request)
     {
-        $data = $request->validate([
-            'nombre' => ['required', 'string', 'max:120'],
-            'documento' => ['required', 'string', 'max:40', 'unique:aprendices,documento'],
-            'correo' => ['required', 'email', 'max:120', 'unique:aprendices,correo'],
-            'ficha_id' => ['nullable', 'integer'],
-        ]);
+        Aprendiz::create($request->validated());
 
-        Aprendiz::create($data);
-
-        return redirect()->route('aprendices.index')->with('ok', 'Aprendiz creado correctamente.');
+        return redirect()->route('aprendices.index')->with('ok', 'Aprendiz creado.');
     }
 
     public function show(Aprendiz $aprendiz)
@@ -43,24 +50,17 @@ class AprendizController extends Controller
         return view('aprendices.edit', compact('aprendiz'));
     }
 
-    public function update(Request $request, Aprendiz $aprendiz)
+    public function update(StoreUpdateAprendizRequest $request, Aprendiz $aprendiz)
     {
-        $data = $request->validate([
-            'nombre' => ['required', 'string', 'max:120'],
-            'documento' => ['required', 'string', 'max:40', 'unique:aprendices,documento,' . $aprendiz->id],
-            'correo' => ['required', 'email', 'max:120', 'unique:aprendices,correo,' . $aprendiz->id],
-            'ficha_id' => ['nullable', 'integer'],
-        ]);
+        $aprendiz->update($request->validated());
 
-        $aprendiz->update($data);
-
-        return redirect()->route('aprendices.index')->with('ok', 'Aprendiz actualizado correctamente.');
+        return redirect()->route('aprendices.index')->with('ok', 'Aprendiz actualizado.');
     }
 
     public function destroy(Aprendiz $aprendiz)
     {
         $aprendiz->delete();
 
-        return redirect()->route('aprendices.index')->with('ok', 'Aprendiz eliminado correctamente.');
+        return redirect()->route('aprendices.index')->with('ok', 'Aprendiz eliminado.');
     }
 }
